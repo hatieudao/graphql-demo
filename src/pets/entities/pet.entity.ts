@@ -1,4 +1,4 @@
-import { Owner } from './../owners/entities/owner.entity';
+import { Owner } from '../../owners/entities/owner.entity';
 import { Field, Int, ObjectType } from "@nestjs/graphql";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 

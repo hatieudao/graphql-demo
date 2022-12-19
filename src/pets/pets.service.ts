@@ -1,36 +1,57 @@
 import { Owner } from './../owners/entities/owner.entity';
 import { OwnersService } from './../owners/owners.service';
-import { CreatePetInput } from './dto/create-pet.dto';
+import { CreatePetInput } from './dto/create-pet.input';
 import { Injectable } from '@nestjs/common';
-import { Pet } from './pet.entity';
+import { Pet } from './entities/pet.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UpdatePetInput } from './dto/update-pet.input';
 
 @Injectable()
 export class PetsService {
   constructor(
-    @InjectRepository(Pet) private readonly repository: Repository<Pet>,
-    private readonly ownersService: OwnersService,
+    @InjectRepository(Pet) private readonly petRepository: Repository<Pet>,
   ) { }
 
   createPet(createInput: CreatePetInput): Promise<Pet> {
-    const pet = this.repository.create(createInput);
-    return this.repository.save(pet);
+    const pet = this.petRepository.create(createInput);
+    return this.petRepository.save(pet);
   }
 
   async findAll(): Promise<Pet[]> {
-    return this.repository.find();
+    return this.petRepository.find();
   }
 
   async findOne(id: number): Promise<Pet> {
-    return this.repository.findOne({
+    return this.petRepository.findOne({
       where: {
         id,
       },
     });
   }
 
-  async getOwner(ownerId: number): Promise<Owner> {
-    return this.ownersService.findOne(+ownerId);
+  async updatePet(id: number, updateInput: UpdatePetInput): Promise<Pet> {
+    await this.petRepository.update(id, {
+      id,
+      ...updateInput,
+    });
+    return this.findOne(id);
+  }
+
+  async removePet(id: number): Promise<boolean> {
+    try {
+      await this.petRepository.delete(id);
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
+  async getPets(ownerId: number): Promise<Pet[]> {
+    return this.petRepository.find({
+      where: {
+        ownerId,
+      },
+    });
   }
 }
