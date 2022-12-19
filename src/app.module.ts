@@ -7,6 +7,7 @@ import { join } from 'path';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { OwnersModule } from './owners/owners.module';
+import { PetTypeModule } from './pet-type/pet-type.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { OwnersModule } from './owners/owners.module';
     }),
     PetsModule,
     OwnersModule,
+    PetTypeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

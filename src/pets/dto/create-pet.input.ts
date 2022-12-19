@@ -7,8 +7,8 @@ export class CreatePetInput {
   @IsString()
   name: string;
 
-  @Field({ nullable: true })
-  type?: string;
+  @Field((type) => Int, { nullable: true })
+  typeId?: number;
 
   @Field((type) => Int, { nullable: true })
   ownerId?: number;
